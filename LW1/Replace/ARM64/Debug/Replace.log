@@ -1,8 +1,12 @@
 ﻿  Replace.cpp
   Replace.vcxproj -> C:\OOP_IPS\LW1\Replace\ARM64\Debug\Replace.exe
-  OK1
-  OK2
-  OK3
-  OK4
-  OK5
-  OK
+  test1
+  test2
+  test3
+  test5
+  test6
+  Failed to open inFile
+  test7
+  test8
+  test9
+  Program testing succeeded

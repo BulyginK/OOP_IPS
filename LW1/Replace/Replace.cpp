@@ -1,33 +1,27 @@
-﻿//"$(ProjectDir)test.bat" "$(TargetPath)" test-data\fox.txt "%TEMP%\fox.txt" bird cat
+﻿//"$(ProjectDir)test.bat" "$(TargetPath)"
 #include <iostream>
 #include <fstream>
 #include <string>
 
-
-// Возвращает результат замены всех вхождения строки searchString внутри строки subject на replacementString
-// Если строка searchString пустая, то возвращается subject
 std::string ReplaceString(const std::string& subject,
 	const std::string& searchString, const std::string& replacementString)
 {
-	// Эта функция написана не до конца. Напишите недостающий код самостоятельно
+	if (searchString.empty())
+	{
+		return subject;
+	}
 
 	size_t pos = 0;
-	// Результат будет записан в новую строку result, оставляя строку subject неизменной
-	// Какие преимущества есть у этого способа по сравнению с алгоритмом, выполняющим
-	// замену прямо в строке subject?
-	std::string result = "";
+	std::string result;
 	while (pos < subject.length())
 	{
-		// Находим позицию искомой строки, начиная с pos
 		size_t foundPos = subject.find(searchString, pos);
-		// В результирующую строку записываем текст из диапазона [pos,foundPos)
 		result.append(subject, pos, foundPos - pos);
 
-		// Напишите недостающий код самостоятельно, чтобы функция работала корректно
 		if (foundPos < subject.length())
 		{
 			result.append(replacementString);
-			pos = foundPos + replacementString.length();
+			pos = foundPos + searchString.length();
 		}
 		else
 		{
@@ -48,6 +42,36 @@ void CopyStreamWithReplacement(std::istream& input, std::ostream& output,
 	}
 }
 
+//принимат строки вместо char
+bool ReplaceStringProgramm(char* inFile, char* outFile, const char* searchString, const char* replacementString)
+{
+	std::ifstream inputFile;
+	std::ofstream outputFile;
+	inputFile.open(inFile);
+	if (!inputFile.is_open())
+	{
+		std::cout << "Failed to open inFile\n";
+		return false;
+	}
+	outputFile.open(outFile);
+	if (!outputFile.is_open())
+	{
+		std::cout << "Failed to open outFile\n";
+		return false;
+	}
+	const std::string search = searchString;
+	const std::string replace = replacementString;
+
+	CopyStreamWithReplacement(inputFile, outputFile, search, replace);
+
+	if (!outputFile.flush())
+	{
+		std::cout << "Failed to save data on disk\n";
+		return false;
+	}
+	return true;
+}
+
 int main(int argc, char* argv[])
 {
 	if (argc != 5)
@@ -57,23 +81,8 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	std::ifstream inputFile;
-	inputFile.open(argv[1]);
-
-	std::ofstream outputFile;
-	outputFile.open(argv[2]);
-
-	std::string search = argv[3];
-	std::string replace = argv[4];
-
-	CopyStreamWithReplacement(inputFile, outputFile, search, replace);
-	// Подумайте, для чего здесь вызывается flush?
-	//outputFile.flush();
-	if (!outputFile.flush()) // Если не удалось сбросить данные на диск
-	{
-		std::cout << "Failed to save data on disk\n";
+	if (ReplaceStringProgramm(argv[1], argv[2], argv[3], argv[4]))
+		return 0;
+	else
 		return 1;
-	}
-
-	return 0;
 }
