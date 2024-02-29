@@ -25,7 +25,7 @@ std::string ReplaceString(const std::string& subject,
 		}
 		else
 		{
-			pos = subject.length();
+			break;
 		}
 	}
 	return result;
@@ -43,7 +43,7 @@ void CopyStreamWithReplacement(std::istream& input, std::ostream& output,
 }
 
 //принимат строки вместо char
-bool ReplaceStringProgramm(char* inFile, char* outFile, const char* searchString, const char* replacementString)
+bool ReplaceStringProgramm(std::string& inFile, std::string& outFile, const std::string& searchString, const std::string& replacementString)
 {
 	std::ifstream inputFile;
 	std::ofstream outputFile;
@@ -59,8 +59,7 @@ bool ReplaceStringProgramm(char* inFile, char* outFile, const char* searchString
 		std::cout << "Failed to open outFile\n";
 		return false;
 	}
-	const std::string search = searchString;
-	const std::string replace = replacementString;
+
 
 	CopyStreamWithReplacement(inputFile, outputFile, search, replace);
 
@@ -81,7 +80,10 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	if (ReplaceStringProgramm(argv[1], argv[2], argv[3], argv[4]))
+	const std::string search = argv[3];
+	const std::string replace = argv[4];
+
+	if (ReplaceStringProgramm(argv[1], argv[2], search, replace))
 		return 0;
 	else
 		return 1;
